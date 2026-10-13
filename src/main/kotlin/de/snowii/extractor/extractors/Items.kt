@@ -37,7 +37,13 @@ class Items : Extractor.Extractor {
                 ).getOrThrow()
             )
 
-            itemsJson.add(itemKey.identifier().path, itemJson)
+            // Vanilla items keep the bare path Pumpkin's codegen expects; any other
+            // namespace is kept, or two mods' same-named items would collide.
+            val identifier = itemKey.identifier()
+            itemsJson.add(
+                if (identifier.namespace == "minecraft") identifier.path else identifier.toString(),
+                itemJson
+            )
         }
 
         return itemsJson
