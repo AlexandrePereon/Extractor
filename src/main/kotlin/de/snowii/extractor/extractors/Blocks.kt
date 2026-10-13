@@ -192,7 +192,12 @@ class Blocks : Extractor.Extractor {
             val blockId = BuiltInRegistries.BLOCK.getKey(block)
 
             blockJson.addProperty("id", BuiltInRegistries.BLOCK.getId(block))
-            blockJson.addProperty("name", blockId.path)
+            // Vanilla blocks keep the bare path Pumpkin's codegen expects; any other
+            // namespace is kept, or two mods' same-named blocks would collide.
+            blockJson.addProperty(
+                "name",
+                if (blockId.namespace == "minecraft") blockId.path else blockId.toString()
+            )
             blockJson.addProperty("translation_key", block.descriptionId)
             blockJson.addProperty("slipperiness", block.friction)
             blockJson.addProperty("velocity_multiplier", block.speedFactor)
