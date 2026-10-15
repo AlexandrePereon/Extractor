@@ -14,9 +14,9 @@ class Screens : Extractor.Extractor {
     override fun extract(server: MinecraftServer): JsonElement {
         val screensJson = JsonArray()
         for (screen in BuiltInRegistries.MENU) {
-            screensJson.add(
-                BuiltInRegistries.MENU.getKey(screen)!!.path,
-            )
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val screenId = BuiltInRegistries.MENU.getKey(screen)!!
+            screensJson.add(if (screenId.namespace == "minecraft") screenId.path else screenId.toString())
         }
 
         return screensJson
