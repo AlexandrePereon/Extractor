@@ -344,7 +344,9 @@ class Blocks : Extractor.Extractor {
 
         val blockEntitiesJson = JsonArray()
         BuiltInRegistries.BLOCK_ENTITY_TYPE.forEach { be ->
-            blockEntitiesJson.add(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be)!!.path)
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val beId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be)!!
+            blockEntitiesJson.add(if (beId.namespace == "minecraft") beId.path else beId.toString())
         }
 
         val shapesJson = JsonArray()
