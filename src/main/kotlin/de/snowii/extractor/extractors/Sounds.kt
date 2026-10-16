@@ -16,9 +16,9 @@ class Sounds : Extractor.Extractor {
     override fun extract(server: MinecraftServer): JsonElement {
         val soundJson = JsonArray()
         for (sound in BuiltInRegistries.SOUND_EVENT) {
-            soundJson.add(
-                BuiltInRegistries.SOUND_EVENT.getKey(sound)!!.path,
-            )
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val id = BuiltInRegistries.SOUND_EVENT.getKey(sound)!!
+            soundJson.add(if (id.namespace == "minecraft") id.path else id.toString())
         }
 
         return soundJson
