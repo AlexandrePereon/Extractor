@@ -15,9 +15,9 @@ class Particles : Extractor.Extractor {
     override fun extract(server: MinecraftServer): JsonElement {
         val particlesJson = JsonArray()
         for (particle in BuiltInRegistries.PARTICLE_TYPE) {
-            particlesJson.add(
-                BuiltInRegistries.PARTICLE_TYPE.getKey(particle)!!.path,
-            )
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val id = BuiltInRegistries.PARTICLE_TYPE.getKey(particle)!!
+            particlesJson.add(if (id.namespace == "minecraft") id.path else id.toString())
         }
 
         return particlesJson
