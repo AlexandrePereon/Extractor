@@ -32,7 +32,9 @@ class Entities : Extractor.Extractor {
 
         for (entityType in BuiltInRegistries.ENTITY_TYPE) {
             val entityJson = JsonObject()
-            val entityName = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).path
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
+            val entityName = if (entityId.namespace == "minecraft") entityId.path else entityId.toString()
             entityJson.addProperty("id", BuiltInRegistries.ENTITY_TYPE.getId(entityType))
 
             val entity = entityType.create(server.overworld(), EntitySpawnReason.NATURAL)
