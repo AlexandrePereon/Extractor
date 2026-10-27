@@ -24,10 +24,9 @@ class EntityAttributes : Extractor.Extractor {
             }
             subObject.addProperty("client_syncable", attribute.isClientSyncable)
 
-            finalJson.add(
-                BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!.path,
-                subObject
-            )
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val id = BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!
+            finalJson.add(if (id.namespace == "minecraft") id.path else id.toString(), subObject)
         }
 
         return finalJson
