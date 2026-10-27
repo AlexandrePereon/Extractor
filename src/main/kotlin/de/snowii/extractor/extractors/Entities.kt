@@ -50,7 +50,7 @@ class Entities : Extractor.Extractor {
             val entityJson = JsonObject()
             // As block names: vanilla keeps the bare path, any other namespace is kept.
             val entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entityType)
-            val entityName = if (entityId.namespace == "minecraft") entityId.path else entityId.toString()
+            val entityName = keepModNamespace(entityId)
             entityJson.addProperty("id", BuiltInRegistries.ENTITY_TYPE.getId(entityType))
 
             // Ignore the spawn checks so peaceful difficulty doesn't drop the monsters.
@@ -63,13 +63,13 @@ class Entities : Extractor.Extractor {
 
                     if (entityName !in TARGET_SOUND_BLACKLIST) {
                         val hurtSound = getHurtSound(entity, damageSource)
-                        val hurtSoundId = hurtSound?.let(BuiltInRegistries.SOUND_EVENT::getKey)?.path
+                        val hurtSoundId = hurtSound?.let(BuiltInRegistries.SOUND_EVENT::getKey)?.let { keepModNamespace(it) }
                         if (hurtSoundId != null) {
                             entityJson.addProperty("hurt_sound", hurtSoundId)
                         }
 
                         val deathSound = getDeathSound(entity)
-                        val deathSoundId = deathSound?.let(BuiltInRegistries.SOUND_EVENT::getKey)?.path
+                        val deathSoundId = deathSound?.let(BuiltInRegistries.SOUND_EVENT::getKey)?.let { keepModNamespace(it) }
                         if (deathSoundId != null) {
                             entityJson.addProperty("death_sound", deathSoundId)
                         }
@@ -141,7 +141,7 @@ class Entities : Extractor.Extractor {
                     if (supplier.hasAttribute(holder)) {
                         val attributeJson = JsonObject()
                         attributeJson.addProperty(
-                            BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!.path,
+                            keepModNamespace(BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!),
                             supplier.getBaseValue(holder)
                         )
                         attributesArray.add(attributeJson)
@@ -239,6 +239,10 @@ class Entities : Extractor.Extractor {
         array.add(point.z)
         return array
     }
+
+    // As block names: vanilla keeps the bare path, any other namespace is kept.
+    private fun keepModNamespace(id: Identifier) =
+        if (id.namespace == "minecraft") id.path else id.toString()
 
     private fun getHurtSound(entity: LivingEntity, damageSource: DamageSource) =
         getHurtSoundMethod.invoke(entity, damageSource) as? net.minecraft.sounds.SoundEvent
