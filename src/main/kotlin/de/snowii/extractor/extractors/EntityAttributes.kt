@@ -18,10 +18,9 @@ class EntityAttributes : Extractor.Extractor {
             subObject.addProperty("id", BuiltInRegistries.ATTRIBUTE.getId(attribute))
             subObject.addProperty("default_value", attribute.defaultValue)
 
-            finalJson.add(
-                BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!.path,
-                subObject
-            )
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            val id = BuiltInRegistries.ATTRIBUTE.getKey(attribute)!!
+            finalJson.add(if (id.namespace == "minecraft") id.path else id.toString(), subObject)
         }
 
         return finalJson
