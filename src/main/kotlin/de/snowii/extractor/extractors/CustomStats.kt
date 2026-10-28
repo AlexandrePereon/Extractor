@@ -15,7 +15,8 @@ class CustomStats : Extractor.Extractor {
         val statsObject = JsonArray()
 
         for (stat in BuiltInRegistries.CUSTOM_STAT) {
-            statsObject.add(stat.path)
+            // As block names: vanilla keeps the bare path, any other namespace is kept.
+            statsObject.add(if (stat.namespace == "minecraft") stat.path else stat.toString())
         }
 
         return statsObject
