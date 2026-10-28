@@ -58,6 +58,7 @@ class Extractor : ModInitializer {
             FlowerPotTransformation(),
             VillagerData(),
             CustomStats(),
+            PoiTypes(),
             Stats(),
             SlotRanges(),
             MapColors(),
