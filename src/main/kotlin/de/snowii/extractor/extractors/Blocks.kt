@@ -450,8 +450,10 @@ class Blocks : Extractor.Extractor {
         return topLevelJson
     }
 
+    // As block names: vanilla keeps the bare path, any other namespace is kept.
     private fun soundName(sound: SoundEvent): String =
-        BuiltInRegistries.SOUND_EVENT.getKey(sound)?.path ?: error("Unregistered block sound ${sound.location()}")
+        BuiltInRegistries.SOUND_EVENT.getKey(sound)?.let { if (it.namespace == "minecraft") it.path else it.toString() }
+            ?: error("Unregistered block sound ${sound.location()}")
 
     private fun <K, V> MutableMap<K, V>.getOrPut(key: K, defaultValue: () -> V): V {
         return this[key] ?: defaultValue().also { this[key] = it }

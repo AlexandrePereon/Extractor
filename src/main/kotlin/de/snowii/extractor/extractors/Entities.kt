@@ -271,7 +271,8 @@ class Entities : Extractor.Extractor {
         getSwimHighSpeedSplashSoundMethod.invoke(entity) as net.minecraft.sounds.SoundEvent
 
     private fun soundName(sound: net.minecraft.sounds.SoundEvent): String =
-        BuiltInRegistries.SOUND_EVENT.getKey(sound)?.path ?: error("Unregistered entity sound ${sound.location()}")
+        BuiltInRegistries.SOUND_EVENT.getKey(sound)?.let { keepModNamespace(it) }
+            ?: error("Unregistered entity sound ${sound.location()}")
 
     companion object {
         private val TARGET_SOUND_BLACKLIST = setOf(
