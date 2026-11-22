@@ -62,6 +62,7 @@ class Extractor : ModInitializer {
             VillagerData(),
             CustomStats(),
             PoiTypes(),
+            ModClasses(),
             Stats(),
             SlotRanges(),
             MapColors(),
