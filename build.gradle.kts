@@ -32,6 +32,14 @@ loom {
             sourceSet("main")
         }
     }
+
+    // `-PextractorRunDir=<dir>` runs the server (and writes the dump) in
+    // another directory, with that directory's `mods/`: one dump per mod set.
+    runs {
+        named("server") {
+            runDir(providers.gradleProperty("extractorRunDir").getOrElse("run"))
+        }
+    }
 }
 
 repositories {
