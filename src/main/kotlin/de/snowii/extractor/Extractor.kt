@@ -63,6 +63,7 @@ class Extractor : ModInitializer {
             CustomStats(),
             PoiTypes(),
             ModClasses(),
+            NoiseGeneratorSettingsDump(),
             Stats(),
             SlotRanges(),
             MapColors(),
